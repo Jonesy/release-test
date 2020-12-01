@@ -1,9 +1,9 @@
-name: Release from master
+name: Release from main
 
 on: 
   push:
     branches:
-      - master
+      - main
 
 jobs:
   release-on-push:
@@ -20,6 +20,7 @@ jobs:
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
           echo "Got release version ${{ steps.release.outputs.version }}"
+
       - uses: actions/checkout@v2
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
