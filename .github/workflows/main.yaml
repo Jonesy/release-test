@@ -16,30 +16,22 @@ jobs:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
 
-      - id: release
-        uses: rymndhng/release-on-push-action@v0.15.0
+      - name: Update package version
+        uses: rimonhanna/gh-action-bump-version@master
+        id: version
         with:
-          bump_version_scheme: patch
+          tag-prefix: 'v'
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          release_name: Release ${{ steps.version.outputs.tag }}
 
       - name: Check Output Parameters
         run: |
-          echo "Got tag name ${{ steps.release.outputs.tag_name }}"
-          echo "Got release version ${{ steps.release.outputs.version }}"
-
-
-      - name: Update package version
-        uses: reedyuk/npm-version@1.0.1
-        with:
-          version: ${{ steps.release.outputs.version }}
-          #- name: Create Release
-          #  uses: actions/create-release@v1
-          #  env:
-          #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          #  with:
-          #    tag_name: ${{ steps.changelog.outputs.tagname }}
-          #    release_name: ${{ steps.changelog.outputs.tag }}
-          #    body: ${{ steps.changelog.outputs.clean_changelog }}
-          #- uses: actions/checkout@v2
-          #  with:
-          #    # Disabling shallow clone is recommended for improving relevancy of reporting
-          #    fetch-depth: 0
+          echo "Got tag name ${{ steps.version.outputs.tag }}"
+          echo "Got release version ${{ steps.version.outputs.tag }}"
