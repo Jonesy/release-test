@@ -21,6 +21,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-on-empty: 'false'
+          skip-commit: 'true'
           #- id: release
           #  uses: rymndhng/release-on-push-action@v0.15.0
           #  with:
