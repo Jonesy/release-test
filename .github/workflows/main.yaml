@@ -11,22 +11,27 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - id: release
-        uses: rymndhng/release-on-push-action@v0.15.0
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v3
         with:
-          bump_version_scheme: patch
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-commit: "true"
+          #- id: release
+          #  uses: rymndhng/release-on-push-action@v0.15.0
+          #  with:
+          #    bump_version_scheme: patch
 
-      - name: Check Output Parameters
-        run: |
-          echo "Got tag name ${{ steps.release.outputs.tag_name }}"
-          echo "Got release version ${{ steps.release.outputs.version }}"
+          #- name: Check Output Parameters
+          #  run: |
+          #    echo "Got tag name ${{ steps.release.outputs.tag_name }}"
+          #    echo "Got release version ${{ steps.release.outputs.version }}"
 
-      - uses: actions/checkout@v2
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
+          #- uses: actions/checkout@v2
+          #  with:
+          #    # Disabling shallow clone is recommended for improving relevancy of reporting
+          #    fetch-depth: 0
 
-      - name: Update package version
-        uses: reedyuk/npm-version@1.0.1
-        with:
-          version: ${{ steps.release.outputs.version }}
+          #- name: Update package version
+          #  uses: reedyuk/npm-version@1.0.1
+          #  with:
+          #    version: ${{ steps.release.outputs.version }}
