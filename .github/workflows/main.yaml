@@ -22,7 +22,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           output-file: 'false'
           release-count: 0
-          fallback-version: 1.0.4
+          fallback-version: 1.0.5
           skip-on-empty: 'false'
           #- id: release
           #  uses: rymndhng/release-on-push-action@v0.15.0
@@ -31,12 +31,12 @@ jobs:
 
       - name: Check Output Parameters
         run: |
-          echo "Got tag name ${{ steps.release.outputs.tag }}"
-          echo "Got release version ${{ steps.release.outputs.version }}"
+          echo "Got tag name ${{ steps.changelog.outputs.tag }}"
+          echo "Got release version ${{ steps.changelog.outputs.version }}"
 
       - name: Create Release
         uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        #if: ${{ steps.changelog.outputs.skipped == 'false' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
