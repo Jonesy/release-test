@@ -22,6 +22,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           fallback-version: 1.0.5
           skip-on-empty: 'false'
+          output-file: 'false'
           #- id: release
           #  uses: rymndhng/release-on-push-action@v0.15.0
           #  with:
