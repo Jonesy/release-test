@@ -15,35 +15,31 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - uses: Klemensas/action-autotag@stable
-        id: changelog
+
+      - id: release
+        uses: rymndhng/release-on-push-action@v0.15.0
         with:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          tag_prefix: "v"
-          #- id: release
-          #  uses: rymndhng/release-on-push-action@v0.15.0
-          #  with:
-          #    bump_version_scheme: patch
+          bump_version_scheme: patch
 
       - name: Check Output Parameters
         run: |
-          echo "Got tag name ${{ steps.changelog.outputs.tagname }}"
-          echo "Got release version ${{ steps.changelog.outputs.version }}"
+          echo "Got tag name ${{ steps.release.outputs.tag_name }}"
+          echo "Got release version ${{ steps.release.outputs.version }}"
 
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update package version
+        uses: reedyuk/npm-version@1.0.1
         with:
-          tag_name: ${{ steps.changelog.outputs.tagname }}
-          release_name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
+          version: ${{ steps.release.outputs.version }}
+          #- name: Create Release
+          #  uses: actions/create-release@v1
+          #  env:
+          #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #  with:
+          #    tag_name: ${{ steps.changelog.outputs.tagname }}
+          #    release_name: ${{ steps.changelog.outputs.tag }}
+          #    body: ${{ steps.changelog.outputs.clean_changelog }}
           #- uses: actions/checkout@v2
           #  with:
           #    # Disabling shallow clone is recommended for improving relevancy of reporting
           #    fetch-depth: 0
-
-          #- name: Update package version
-          #  uses: reedyuk/npm-version@1.0.1
-          #  with:
-          #    version: ${{ steps.release.outputs.version }}
