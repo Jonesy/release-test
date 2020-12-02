@@ -20,11 +20,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          fallback-version: 1.0.5
-          skip-on-empty: 'false'
           output-file: 'false'
-          release-count: 0
-          skip-commit: 'true'
           #- id: release
           #  uses: rymndhng/release-on-push-action@v0.15.0
           #  with:
