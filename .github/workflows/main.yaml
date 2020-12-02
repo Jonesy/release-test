@@ -15,12 +15,11 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - name: Conventional Changelog Action
+      - uses: Klemensas/action-autotag@stable
         id: changelog
-        uses: TriPSs/conventional-changelog-action@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          output-file: 'false'
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          tag_prefix: "v"
           #- id: release
           #  uses: rymndhng/release-on-push-action@v0.15.0
           #  with:
@@ -28,16 +27,15 @@ jobs:
 
       - name: Check Output Parameters
         run: |
-          echo "Got tag name ${{ steps.changelog.outputs.tag }}"
+          echo "Got tag name ${{ steps.changelog.outputs.tagname }}"
           echo "Got release version ${{ steps.changelog.outputs.version }}"
 
       - name: Create Release
         uses: actions/create-release@v1
-        #if: ${{ steps.changelog.outputs.skipped == 'false' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
+          tag_name: ${{ steps.changelog.outputs.tagname }}
           release_name: ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
           #- uses: actions/checkout@v2
