@@ -1,0 +1,36 @@
+name: Edge release
+
+on: 
+  push:
+    branches:
+      - dev
+
+jobs:
+  release-on-push:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          
+      - name: NPM build
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - run: |
+          VER="${{ steps.release.outputs.tag_name }}"
+          (mkdir sbin)
+          (cp index.js sbin/)
+
+      - uses: meeDamian/github-release@2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: edge
+          files: sbin/index.js
+          gzip: 'false'
+          allow_override: 'true'
+          prerelease: 'true'
