@@ -16,11 +16,12 @@ jobs:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
 
-      - name: Update package version
-        uses: rimonhanna/gh-action-bump-version@master
-        id: version
-        with:
-          tag-prefix: 'v'
+      - name: Get Package Version
+        uses: nyaayaya/package-info@v1
+
+      - name: Show Version
+        run: |
+          echo "Preparing to release v${{ env.PACKAGE_VERSION }}"
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -28,10 +29,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          release_name: Release ${{ steps.version.outputs.tag }}
-
-      - name: Check Output Parameters
-        run: |
-          echo "Got tag name ${{ steps.version.outputs.tag }}"
-          echo "Got release version ${{ steps.version.outputs.tag }}"
+          tag_name: ${{ env.PACKAGE_VERSION }}
+          release_name: Release ${{ env.PACKAGE_VERSION }}
