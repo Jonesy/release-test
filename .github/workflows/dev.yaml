@@ -31,5 +31,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: edge
           files: sbin/index.js
+          gzip: 'false'
           allow_override: 'true'
           prerelease: 'true'
