@@ -1,0 +1,31 @@
+name: Edge release
+
+on: 
+  push:
+    branches:
+      - dev
+
+jobs:
+  release-on-push:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: NPM build
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - run: |
+          VER="${{ steps.release.outputs.tag_name }}"
+          (mkdir sbin)
+          (cp index.js sbin/)
+          (cd sbin && zip -mqj file.zip index.js)
+
+      - uses: meeDamian/github-release@2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: edge
+          files: sbin/
+          allow_override: 'true'
+          prerelease: 'true'
